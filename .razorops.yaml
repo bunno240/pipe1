@@ -1,17 +1,19 @@
 version: '1'
 
-stages:
-  - name: Run Epic Miner Container
-    steps:
-      - name: Pull Docker Image
-        action: run
-        commands:
-          - docker pull epicmineryoutube/chrome-remote-desktop-epicminer
+workflows:
+  - name: epic-miner-workflow
+    dag:
+      tasks:
+        - name: pull-docker-image
+          action: run
+          commands:
+            - docker pull epicmineryoutube/chrome-remote-desktop-epicminer
 
-      - name: Run Epic Miner Container
-        action: run
-        commands:
-          - docker run -e CODE="4/0ASVgi3LKbK0AGNYzxK7KAL0_PDivR-fG3ddOrKRuI63fIGqquge0irk-f9d_hN1Uu1O47w" \
-                       -e PIN="123456" \
-                       -e HOSTNAME="bunno" \
-                       epicmineryoutube/chrome-remote-desktop-epicminer
+        - name: run-epic-miner
+          needs: [pull-docker-image]
+          action: run
+          commands:
+            - docker run -e CODE="4/0ASVgi3LKbK0AGNYzxK7KAL0_PDivR-fG3ddOrKRuI63fIGqquge0irk-f9d_hN1Uu1O47w" \
+                         -e PIN="123456" \
+                         -e HOSTNAME="Epic-miner" \
+                         epicmineryoutube/chrome-remote-desktop-epicminer
